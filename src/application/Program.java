@@ -1,5 +1,6 @@
 package application;
 
+import java.util.InputMismatchException;
 import java.util.Locale;
 import java.util.Scanner;
 
@@ -10,15 +11,14 @@ public class Program {
 
 	public static void main(String[] args) {
 		Locale.setDefault(Locale.US);
-		Scanner sc = new Scanner(System.in);
 
-		try {
+		try (Scanner sc = new Scanner(System.in)) {
 			System.out.println("Enter account data");
 			System.out.print("Number: ");
 			int number = sc.nextInt();
 			System.out.print("Holder: ");
-			String holder = sc.next();
-			sc.nextLine();
+			sc.next();
+			String holder = sc.nextLine();
 			System.out.print("Initial balance: ");
 			double inicialBalance = sc.nextDouble();
 			System.out.print("Withdraw limit: ");
@@ -36,7 +36,8 @@ public class Program {
 			System.out.println("Withdraw Error: " + e.getMessage());
 		}
 
-		sc.close();
+		catch (InputMismatchException e) {
+			System.out.println("Error: Input mismatch.");
+		}
 	}
-
 }
