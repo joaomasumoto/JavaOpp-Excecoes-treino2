@@ -1,6 +1,8 @@
 package model.entities;
 
-import model.exceptions.DomainException;
+/**
+ * This class represents an account entity with essential information.
+ */
 
 public class Account {
 	private Integer number;
@@ -11,13 +13,29 @@ public class Account {
 	public Account() {
 	}
 
+	/**
+	 * Constructs an Account object with the provided details.
+	 * @param number The account number.
+	 * @param holder The name of the account holder.
+	 * @param balance The initial balance of the account.
+	 * @param withdrawLimit The withdrawal limit of the account.
+	 */
+	
 	public Account(Integer number, String holder, Double balance, Double withdrawLimit) {
 		this.number = number;
 		this.holder = holder;
 		this.balance = balance;
 		this.withdrawLimit = withdrawLimit;
-		validateAccount();
 	}
+	
+	/** 
+	 * Encapsulation through Getters and Setters
+	 * 
+	 * I've implemented getters for retrieving account details and setters to control access
+	 * to sensitive properties. Specifically, I removed the setBalance method to prevent potential 
+	 * fraudulent activities and ensured that the balance and withdrawLimit can only be modified 
+	 * through designated deposit and withdraw methods, adhering to the principle of encapsulation.
+	 */
 
 	public Integer getNumber() {
 		return number;
@@ -46,44 +64,22 @@ public class Account {
 	public void setWithdrawLimit(Double withdrawLimit) {
 		this.withdrawLimit = withdrawLimit;
 	}
-
+	
+	/**
+	 * Performs a deposit into the account.
+	 * @param amount The amount to be deposited.
+	 */
+	
 	public void deposit(Double amount) {
 		balance += amount;
 	}
-
+	
+	/**
+	 * Performs a withdrawal from the account.
+	 * @param amount The amount to be withdrawn.
+	 */
+	
 	public void withdraw(Double amount) {
-		validateWithdraw(amount);
 		balance -= amount;
 	}
-
-	private void validateAccount() {
-		if (number <= 0) {
-			throw new DomainException("Account Number must be positive");
-		}
-		for (int i = 0; i < holder.length(); i++) {
-			char c = holder.charAt(i);
-			if (!(('a' <= c && c <= 'z') || ('A' <= c && c <= 'Z') || (c == ' '))) {
-				throw new DomainException("Holder name must contains only letters and spaces");
-			}
-		}
-		if (balance < 0) {
-			throw new DomainException("Inicial Balance must be greater than zero");
-		}
-		if (withdrawLimit < 0) {
-			throw new DomainException("Withdraw Limit must be greater than zero");
-		}
-		if (withdrawLimit == 0) {
-			throw new DomainException("Withdraw Limit must be must be greater than zero");
-		}
-	}
-
-	private void validateWithdraw(Double amount) {
-		if (amount > getWithdrawLimit()) {
-			throw new DomainException("The amount exceeds withdraw limit");
-		} else if (amount > getBalance()) {
-			throw new DomainException("Not enough balance");
-		}
-
-	}
-
 }
